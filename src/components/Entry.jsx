@@ -7,7 +7,7 @@ function Entry () {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate("/login");
+        navigate("/signup");
     }
 
     return (
@@ -17,7 +17,7 @@ function Entry () {
             <div className="text-white text-sm ml-4 font-bold">
             1Pass
         </div>
-        <button className="bg-blue-700 text-white px-15 py-2 rounded hover:bg-blue-950 rounded-t-full rounded-b-full mr-1 cursor-pointer" onClick={handleClick}>
+        <button className="bg-blue-700 text-white px-15 py-2 rounded hover:bg-blue-600 rounded-t-full rounded-b-full mr-1 cursor-pointer" onClick={handleClick}>
             Get started
         </button>
         </nav>
