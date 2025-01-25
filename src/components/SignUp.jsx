@@ -1,13 +1,20 @@
 import {auth, provider} from '../config/firebase';
 import { useState } from 'react';
+import { AuthContext } from '../Hooks/UseContext';
+import { useContext } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 function SignUp() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
+    const {signedIn, setSignedIn} = useContext(AuthContext);
+    const navigate = useNavigate();
     // Handle the change in the username input field
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);
+        return;
     }
 
     // Handle the change in the password input field
@@ -15,7 +22,7 @@ function SignUp() {
         setPassword(e.target.value);
     }
 
-    const auth = getAuth();
+    //const auth = getAuth();
     // Function to create a new user
     const createUser = async () => {
         // Function to create a new user
@@ -28,7 +35,7 @@ function SignUp() {
             console.log("User created successfully!");
             setUserName("");
             setPassword("");
-            window.location.href = "/login";
+            navigate("/login");
         } catch (error) {
             console.error("Error creating user: ", error);
         }
@@ -38,6 +45,8 @@ function SignUp() {
         try {
             const popup = await signInWithPopup(auth, provider);
             console.log("User signed in successfully!");
+            setSignedIn(true);
+            navigate("/dashboard");
         } catch (error) {
             console.error("Error signing in: ", error);
         }

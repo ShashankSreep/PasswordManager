@@ -2,9 +2,16 @@ import React from 'react';
 import {auth, provider} from '../config/firebase';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 import {useState } from 'react';
+import { AuthContext } from '../Hooks/UseContext';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 function Login() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+
+    const { signedIn, setSignedIn } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     // Handle the change in the username input field
     const handleUserNameChange = (e) => {
@@ -16,7 +23,7 @@ function Login() {
         setPassword(e.target.value);
     }
 
-    const auth = getAuth();
+   // const auth = getAuth();
 
     // Function to sign in user
     const signInUser = async () => {
@@ -29,6 +36,8 @@ function Login() {
             console.log("User signed in successfully!");
             setUserName("");
             setPassword("");
+            setSignedIn(true);
+            navigate("/dashboard");
         } catch (error) {
             console.error("Error signing in: ", error);
         }
@@ -38,6 +47,8 @@ function Login() {
         try {
             const popup = await signInWithPopup(auth, provider);
             console.log("User signed in successfully!");
+            setSignedIn(true);
+            navigate("/dashboard");
         } catch (error) {
             console.error("Error signing in: ", error);
         }
