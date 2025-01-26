@@ -37,6 +37,13 @@ function Login() {
             alert("Username or password cannot be empty!");
         }
 
+        // Verify the password is at least 8 characters long
+        // and contains at least one special character
+
+        if (password.length < 8 || !password.match(/[^a-zA-Z0-9]/) || !password.match(/[!@#$%^&*]/)) {
+            alert("Password must be at least 8 characters long and contain at least one special character");
+        }
+
         try {
             const user_signin = await signInWithEmailAndPassword(auth, userName, password);
             console.log("User signed in successfully!");
