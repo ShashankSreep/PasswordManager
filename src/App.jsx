@@ -6,17 +6,18 @@ import SignUp from './components/SignUp';
 import Dashboard from './components/Dashboard';
 import { createContext, useState } from 'react';
 import { AuthContext } from './Hooks/UseContext';
+import { usePersistStorage } from './Hooks/usePersistStorage';
 
 function App() {
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
   return (
     <AuthContext.Provider value={{signedIn, setSignedIn}}>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Entry />} />
-        <Route path="/login" element={<Login />}/>
-        <Route path="/signup" element={<SignUp />}/>
-        <Route path="/dashboard" element={ signedIn ? <Dashboard /> : <Navigate to="/login" />}/>
+        <Route path="/" element={!signedIn? <Entry /> : <Navigate to="/dashboard" />}/>
+        <Route path="/login" element={!signedIn? <Login /> : <Navigate to ="/dashboard" />}/>
+        <Route path="/signup" element={!signedIn ? <SignUp /> : <Navigate to="/dashboard" />}/>
+        <Route path="/dashboard" element={ <Dashboard />}/>
       </Routes>
     </BrowserRouter>
   </AuthContext.Provider>

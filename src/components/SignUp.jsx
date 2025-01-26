@@ -5,16 +5,19 @@ import { useContext } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePersistStorage } from '../Hooks/usePersistStorage';
+import { setItem } from '../utils/localStorage';
 function SignUp() {
+
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
     const {signedIn, setSignedIn} = useContext(AuthContext);
+
     const navigate = useNavigate();
     // Handle the change in the username input field
     const handleUserNameChange = (e) => {
         setUserName(e.target.value);
-        return;
     }
 
     // Handle the change in the password input field
@@ -45,7 +48,8 @@ function SignUp() {
         try {
             const popup = await signInWithPopup(auth, provider);
             console.log("User signed in successfully!");
-            setSignedIn(true);
+            //setSignedIn(true);
+            setItem("loggedin", true); // Set the signedIn state in localStorage
             navigate("/dashboard");
         } catch (error) {
             console.error("Error signing in: ", error);

@@ -5,13 +5,19 @@ import {useState } from 'react';
 import { AuthContext } from '../Hooks/UseContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { usePersistStorage } from '../Hooks/usePersistStorage';
+import { setItem } from '../utils/localStorage';
+import { use } from 'react';
+import { useEffect } from 'react';
 
 function Login() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
 
     const { signedIn, setSignedIn } = useContext(AuthContext);
-    const navigate = useNavigate();
+
 
     // Handle the change in the username input field
     const handleUserNameChange = (e) => {
@@ -36,7 +42,7 @@ function Login() {
             console.log("User signed in successfully!");
             setUserName("");
             setPassword("");
-            setSignedIn(true);
+            setItem("loggedin", true); // Set the signedIn state in localStorage
             navigate("/dashboard");
         } catch (error) {
             console.error("Error signing in: ", error);
@@ -47,7 +53,7 @@ function Login() {
         try {
             const popup = await signInWithPopup(auth, provider);
             console.log("User signed in successfully!");
-            setSignedIn(true);
+            setItem("loggedin", true); // Set the signedIn state in localStorage
             navigate("/dashboard");
         } catch (error) {
             console.error("Error signing in: ", error);
