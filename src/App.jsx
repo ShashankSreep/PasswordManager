@@ -7,9 +7,11 @@ import Dashboard from './components/Dashboard';
 import { createContext, useState } from 'react';
 import { AuthContext } from './Hooks/UseContext';
 import { usePersistStorage } from './Hooks/usePersistStorage';
+import Modal from './components/Modal';
 
 function App() {
   const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <AuthContext.Provider value={{signedIn, setSignedIn}}>
     <BrowserRouter>
@@ -20,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={ <Dashboard />}/>
       </Routes>
     </BrowserRouter>
+    {modalOpen && <Modal setModalOpen={setModalOpen} />}
   </AuthContext.Provider>
   )
 }
