@@ -3,9 +3,9 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
-const addNewMasterPassword = async (masterPassword) =>  {
+export const addNewMasterPassword = async (masterPassword) =>  {
     try {
-        const ref = await addDoc(doc(db, "MasterPassword"), {
+        const ref = await setDoc(doc(db, "MasterPassword", "MP"), {
             masterPassword: masterPassword
         });
     } catch (error) {
@@ -13,26 +13,30 @@ const addNewMasterPassword = async (masterPassword) =>  {
     }
 }
 
-const retrieveMasterPassword = async () => {
+export const retrieveMasterPassword = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, "MasterPassword"));
-        console.log("Master Password: ", querySnapshot.docs[0].data().masterPassword);
+        const querySnapshot = await getDocs(collection(db, "MasterPassword", "MP"));
+        console.log("Master Password: ", querySnapshot.data());
     } catch (error) {
         console.error("Error retrieving master password: ", error);
     }
 }
 
-// const deleteMasterPassword = async () => {
-//     try {
-//         const ref = await 
-//     }
-// }
-
-const updateMasterPassword = async (newMasterPassword) => {
+export const deleteMasterPassword = async () => {
     try {
-        const ref = await updateDoc(doc(db, "MasterPassword"), {
+        await deleteDoc(doc(db, "MasterPassword", "MP"));
+        console.log("Master Password deleted successfully!");
+    } catch (error) {
+        console.error("Error deleting master password: ", error);
+    }
+}
+
+export const updateMasterPassword = async (newMasterPassword) => {
+    try {
+        const ref = await updateDoc(doc(db, "MasterPassword", "MP"), {
             masterPassword: newMasterPassword
         })
+        console.log("Master Password updated successfully!");
     } catch (error) {
         console.error("Error updating master password: ", error);
     }

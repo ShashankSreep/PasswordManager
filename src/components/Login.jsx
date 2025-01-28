@@ -56,7 +56,7 @@ function Login() {
             setUserName("");
             setPassword("");
             setItem("loggedin", true); // Set the signedIn state in localStorage
-            navigate("/dashboard"); // TODO: Update to navigate to the MasterPassword
+            navigate("/masterpass"); // TODO: Update to navigate to the MasterPassword
         } catch (error) {
             console.error("Error signing in: ", error);
         }
@@ -67,7 +67,7 @@ function Login() {
             const popup = await signInWithPopup(auth, provider);
             console.log("User signed in successfully!");
             setItem("loggedin", true); // Set the signedIn state in localStorage
-            navigate("/dashboard"); // TODO: Update to naviate to the MasterPassword
+            navigate("/masterpass"); // TODO: Update to naviate to the MasterPassword
         } catch (error) {
             console.error("Error signing in: ", error);
         }

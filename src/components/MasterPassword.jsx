@@ -10,8 +10,11 @@
 import {useState} from 'react';
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { hashPassword, comparePassword } from '../SecurePass/password';
+import { compare } from 'bcryptjs';
 function MasterPassword () {
     const [showPass, setShowPass] = useState(false);
+    const [masterPassword, setMasterPassword] = useState("");
     const navigate = useNavigate();
     const togglePass = () => {
         setShowPass(prevState => !prevState)
@@ -20,8 +23,20 @@ function MasterPassword () {
     const handleEnter = (e) => {
         if (e.key == "Enter") {
             console.log("Enter key pressed");
-            navigate("/dashboard");
+
+            const curr_pass = masterPassword
+            if (comparePassword(curr_pass, masterPassword)) {
+                console.log("Master Password is correct");
+                navigate("/dashboard");
+            } else {
+                console.log("Master Password is incorrect");
+                alert("Master Password is incorrect");
+            }
         }
+    }
+
+    const handlePassChange = (e) => {
+        setMasterPassword(e.target.value);
     }
 
     return (
@@ -33,6 +48,7 @@ function MasterPassword () {
                 <input
                     type={showPass ? "text" : "password"}
                     placeholder="Master Password"
+                    onChange={handlePassChange}
                     onKeyPress={handleEnter}
                     className="w-full px-4 py-2 border-b border-white-300 text-white focus:outline-none"
                 />
@@ -52,7 +68,9 @@ function MasterPassword () {
                 )}
               </button>
                 </div>
+                <h1 className="text-white text-center mt-3">No Master Password?<a href="/createMaster" className="text-blue-500 underline ml-1">Create</a></h1>
             </div>
+            
         </div>
     );
 }
