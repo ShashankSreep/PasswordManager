@@ -10,7 +10,11 @@ function Modal( {closeModal} ) {
                 <button className="absolute top-2 right-2 text-white text-2xl cursor-pointer rounded-full p-2" onClick={() => closeModal(false)}>
                     X
                 </button>
-                
+                <input
+                    type="text"
+                    placeholder="Name"
+                    className="w-64 px-4 py-2 border-b border-white-300 text-white mt-5 focus:outline-none"
+                />
                 <input 
                     type="text" 
                     placeholder="Email/Username"

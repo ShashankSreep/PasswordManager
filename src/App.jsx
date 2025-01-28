@@ -8,6 +8,7 @@ import { createContext, useState } from 'react';
 import { AuthContext } from './Hooks/UseContext';
 import { usePersistStorage } from './Hooks/usePersistStorage';
 import Modal from './components/Modal';
+import MasterPassword from './components/MasterPassword';
 
 function App() {
   const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={!signedIn? <Login /> : <Navigate to ="/dashboard" />}/>
         <Route path="/signup" element={!signedIn ? <SignUp /> : <Navigate to="/dashboard" />}/>
         <Route path="/dashboard" element={ <Dashboard />}/>
+        <Route path="/masterpass" element= {<MasterPassword />} />
       </Routes>
     </BrowserRouter>
     {modalOpen && <Modal setModalOpen={setModalOpen} />}
