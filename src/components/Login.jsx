@@ -46,9 +46,6 @@ function Login() {
         // Verify the password is at least 8 characters long
         // and contains at least one special character
 
-        if (password.length < 8 || !password.match(/[^a-zA-Z0-9]/) || !password.match(/[!@#$%^&*]/)) {
-            alert("Password must be at least 8 characters long and contain at least one special character");
-        }
 
         try {
             const user_signin = await signInWithEmailAndPassword(auth, userName, password);
@@ -56,9 +53,12 @@ function Login() {
             setUserName("");
             setPassword("");
             setItem("loggedin", true); // Set the signedIn state in localStorage
-            navigate("/masterpass"); // TODO: Update to navigate to the MasterPassword
+            navigate("/dashboard"); // TODO: Update to navigate to the MasterPassword
         } catch (error) {
             console.error("Error signing in: ", error);
+            alert("Invalid username or password");
+            setUserName("");
+            setPassword("");
         }
     }
 
@@ -67,9 +67,15 @@ function Login() {
             const popup = await signInWithPopup(auth, provider);
             console.log("User signed in successfully!");
             setItem("loggedin", true); // Set the signedIn state in localStorage
-            navigate("/masterpass"); // TODO: Update to naviate to the MasterPassword
+            navigate("/dashboard"); // TODO: Update to naviate to the MasterPassword
         } catch (error) {
             console.error("Error signing in: ", error);
+        }
+    }
+
+    const logUserEnter = (e) => {
+        if (e.key === "Enter" && userName !== "" && password !== "") {
+            signInUser();
         }
     }
 
@@ -80,7 +86,8 @@ function Login() {
                     <input 
                         type="text" 
                         placeholder="Username"
-                        value={userName} // Set the value of the input field to the userName state
+                        onKeyDown={(e) => logUserEnter(e)} // Call the logUserEnter function when the user presses a key
+                        value={userName} // Set the value of the input field to the userName state // Call the logUserEnter function when the user presses a key
                         onChange={handleUserNameChange} // Call the handleUserNameChange function when the input field changes
                         className="w-64 px-4 py-2 border-b border-white-300 text-white mt-5 focus:outline-none"
                     />
@@ -90,6 +97,7 @@ function Login() {
                             placeholder="Password" 
                             value={password} // Set the value of the input field to the password state
                             onChange={handlePasswordChange} // Call the handlePasswordChange function when the input field changes
+                            onKeyDown={(e) => logUserEnter(e)}
                             className="w-full px-4 py-2 border-b border-white-300 text-white focus:outline-none"
                         />
                         <button 

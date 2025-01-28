@@ -39,8 +39,6 @@ function SignUp() {
     }
     
 
-
-
     //const auth = getAuth();
     // Function to create a new user
     const createUser = async () => {
@@ -59,6 +57,12 @@ function SignUp() {
             console.log("Added ")
         } catch (error) {
             console.error("Error creating user: ", error);
+        }
+    }
+
+    const createUserEnter = (e) => {
+        if (e.key === "Enter" && userName !== "" && password !== "") {
+            createUser();
         }
     }
 
@@ -84,6 +88,7 @@ function SignUp() {
               placeholder="Username" 
               value={userName}
               onChange={handleUserNameChange}
+              onKeyDown={(e) => {createUserEnter(e)}}
               className="w-64 px-4 py-2 border-b border-white-300 text-white mt-5 focus:outline-none"
             />
             <div className="relative w-64 mt-5">

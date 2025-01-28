@@ -10,6 +10,7 @@ import { usePersistStorage } from './Hooks/usePersistStorage';
 import Modal from './components/Modal';
 import MasterPassword from './components/MasterPassword';
 import CreateMaster from './components/CreateMaster';
+import Profile from './components/Profile';
 function App() {
   const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,6 +24,7 @@ function App() {
         <Route path="/dashboard" element={ <Dashboard />}/>
         <Route path="/masterpass" element= {<MasterPassword />} />
         <Route path="/createMaster" element = {<CreateMaster />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
     {modalOpen && <Modal setModalOpen={setModalOpen} />}
