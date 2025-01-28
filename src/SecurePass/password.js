@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { retrieveMasterPassword } from '../config/firebase_api';
 const saltRounds = 10;
 export const hashPassword = async (password) => {
     try {
@@ -10,9 +11,16 @@ export const hashPassword = async (password) => {
     }
 }
 
-export const comparePassword = async (password, hashedPass) => {
+export const comparePassword = async (password) => {
     try {
-        const match = await bcrypt.compare(password, hashedPass);
+        const masterPassword = await retrieveMasterPassword();
+        const match = await bcrypt.compare(password, masterPassword);
+        if (match) {
+            console.log("Password match!");
+        } else {
+            console.log("Password does not match!");
+            console.log(match);
+        }
         return match;
     } catch (error) {
         console.error("Error comparing password: ", error);

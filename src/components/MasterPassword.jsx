@@ -15,23 +15,22 @@ import { compare } from 'bcryptjs';
 function MasterPassword () {
     const [showPass, setShowPass] = useState(false);
     const [masterPassword, setMasterPassword] = useState("");
+
     const navigate = useNavigate();
     const togglePass = () => {
         setShowPass(prevState => !prevState)
     }
 
-    const handleEnter = (e) => {
-        if (e.key == "Enter") {
-            console.log("Enter key pressed");
-
-            const curr_pass = masterPassword
-            if (comparePassword(curr_pass, masterPassword)) {
-                console.log("Master Password is correct");
-                navigate("/dashboard");
-            } else {
-                console.log("Master Password is incorrect");
-                alert("Master Password is incorrect");
-            }
+    const handleEnter = async () => {
+        const curr_pass = masterPassword
+        const match = await comparePassword(curr_pass);
+        console.log("match?", match);
+        if (match) {
+            console.log("Master Password is correct");
+            navigate("/dashboard");
+        } else {
+            console.log("Master Password is incorrect");
+            alert("Master Password");
         }
     }
 
@@ -49,7 +48,6 @@ function MasterPassword () {
                     type={showPass ? "text" : "password"}
                     placeholder="Master Password"
                     onChange={handlePassChange}
-                    onKeyPress={handleEnter}
                     className="w-full px-4 py-2 border-b border-white-300 text-white focus:outline-none"
                 />
                 <button 
@@ -69,6 +67,7 @@ function MasterPassword () {
               </button>
                 </div>
                 <h1 className="text-white text-center mt-3">No Master Password?<a href="/createMaster" className="text-blue-500 underline ml-1">Create</a></h1>
+                <button className='px-8 py-2 bg-slate-700 hover:bg-slate-600 rounded-md text-white cursor-pointer mt-5' onClick={handleEnter}>Enter</button>
             </div>
             
         </div>

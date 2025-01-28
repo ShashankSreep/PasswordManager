@@ -1,6 +1,6 @@
 // Functions, which we will call in our components => Basically API to interact with Firebase
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export const addNewMasterPassword = async (masterPassword) =>  {
@@ -15,8 +15,9 @@ export const addNewMasterPassword = async (masterPassword) =>  {
 
 export const retrieveMasterPassword = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, "MasterPassword", "MP"));
-        console.log("Master Password: ", querySnapshot.data());
+        const querySnapshot = await getDoc(doc(db, "MasterPassword", "MP"));
+        console.log("Master Password: ", querySnapshot.data().masterPassword);
+        return querySnapshot.data().masterPassword;
     } catch (error) {
         console.error("Error retrieving master password: ", error);
     }
