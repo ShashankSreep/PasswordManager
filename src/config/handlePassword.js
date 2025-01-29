@@ -1,6 +1,6 @@
 // This contains all of the API calls to handle the passwords database
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "./firebase";
 
 
@@ -22,9 +22,14 @@ export const addNewEntry = async (name, email, password, website_name, key) => {
 
 export const retrieveAllEntries = async () => {
     try {
-        const querySnapshot = await getDoc(doc(db, "Passwords"));
-        console.log("All Entries: ", querySnapshot.data());
-        return querySnapshot.data();
+        const res = []
+        const querySnapshot = await getDocs(collection(db, "Passwords"));
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data().Name);
+            res.push(doc.data().Name);
+        }
+        );
+        return res;
     } catch (error) {
         console.error("Error retrieving all entries: ", error);
     }

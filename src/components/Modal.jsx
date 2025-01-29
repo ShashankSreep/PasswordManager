@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,12 +7,18 @@ import { db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import {addNewEntry} from '../config/handlePassword';
 import { encryptPass, decryptPass } from '../SecurePass/encrypt';
+import { UpdateContext } from '../Hooks/UseContext';
 function Modal({ closeModal }) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [website, setWebsite] = useState("");
 
+    const {refresh, setRefresh} = useContext(UpdateContext);
+
+
+    // On the click, we add a new entry to the database
+    // We ALSO need to 
     const handleClick = async () => {
         console.log("Clicked!");
         // Save everything and push to the database
@@ -21,8 +27,11 @@ function Modal({ closeModal }) {
         addNewEntry(name, email, encryptedPass, website, key);
 
         console.log("Added new entry!");
+        setRefresh(!refresh);
         closeModal(false);
     }
+
+
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">

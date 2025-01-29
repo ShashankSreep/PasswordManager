@@ -6,6 +6,10 @@ import Modal from './Modal';
 import { useNavigate } from 'react-router-dom';
 import PasswordCard from './PasswordCard';
 import PassDisplay from './PassDisplay';
+import {useEffect} from 'react';
+import { retrieveAllEntries } from '../config/handlePassword';
+
+// Any time we add a new password, we should call the PasswordCard component
 function Dashboard() {
     // Check if the user is logged in
     // If not, redirect to the login page
@@ -13,10 +17,21 @@ function Dashboard() {
     const navigate = useNavigate();
     const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [entries, setEntries] = useState([]);
+
     if (!signedIn) {
         return <Navigate to="/signup" />;
     }
 
+    const retrieveEntries = async () => {
+      try {
+        const allEntries = await retrieveAllEntries();
+        setEntries(allEntries);
+        console.log("Entries: ", entries);
+      } catch (error) {
+        console.error("Error retrieving entries: ", error);
+      }
+    }
     
     const handleNewClick = () => {
         console.log("New button clicked");
@@ -28,6 +43,13 @@ function Dashboard() {
         setSignedIn(false);
         return <Navigate to="/" />;
     }
+
+    const handleSaveClick = () => {
+        console.log("Save button clicked");
+        setModalOpen(true);
+        retrieveEntries(); // Retrieve all the entries from the database
+    }
+
 
     // Top right of the page, there should be a button to show the user's profile 
     // It should contain their profile picture (from google) OR a default profile picture
@@ -79,6 +101,9 @@ function Dashboard() {
                   New
               </button>
               {/* Call the PasswordCard to display to test for now */}
+              {/* Should display all the passwords in the database */}
+              {/*Reload the PasswordCard component to display the new password */}
+              {/* pass the passwords list as a prop */}
               <PasswordCard />
           </div>
       </div>

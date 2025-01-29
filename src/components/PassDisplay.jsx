@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { decryptPass } from "../SecurePass/encrypt";
 import { retrieveEntry } from "../config/handlePassword";
-function PassDisplay({ nameState }) {
-    const [name, setName] = useState("");
+import { useParams } from "react-router-dom";
+function PassDisplay() {
+    const { name } = useParams();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [website, setWebsite] = useState("");
@@ -14,11 +15,10 @@ function PassDisplay({ nameState }) {
     useEffect(() => {
         const getData = async () => {
             try {
-                const data = await retrieveEntry("Google");
+                const data = await retrieveEntry(name);
                 console.log("Data: ", data);
-                const decryptedPass = await decryptPass("Google");
+                const decryptedPass = await decryptPass(name);
                 console.log("Decrypted Password: ", decryptedPass);
-                setName(data.Name);
                 setEmail(data.Email);
                 setPassword(decryptedPass);
                 setWebsite(data.Website);
