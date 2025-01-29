@@ -11,6 +11,7 @@ import Modal from './components/Modal';
 import MasterPassword from './components/MasterPassword';
 import CreateMaster from './components/CreateMaster';
 import Profile from './components/Profile';
+import PassDisplay from './components/PassDisplay';
 function App() {
   const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,6 +26,7 @@ function App() {
         <Route path="/masterpass" element= {<MasterPassword />} />
         <Route path="/createMaster" element = {<CreateMaster />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/displaypass" element={<PassDisplay />} />
       </Routes>
     </BrowserRouter>
     {modalOpen && <Modal setModalOpen={setModalOpen} />}

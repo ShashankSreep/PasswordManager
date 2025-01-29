@@ -4,14 +4,15 @@ import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc, getDoc } from 
 import { db } from "./firebase";
 
 
-export const addNewEntry = async (name, email, password, website_name) => {
+export const addNewEntry = async (name, email, password, website_name, key) => {
     try {
         const ref = await setDoc(doc(db, "Passwords", name), {
             Name: name, 
             Email: email, 
             Password: password, 
             Website: website_name,
-            Favorite: false
+            Favorite: false, 
+            Key: key
         });
         console.log("New entry added successfully!");
     } catch (error) {

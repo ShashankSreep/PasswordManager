@@ -4,6 +4,8 @@ import { usePersistStorage } from '../Hooks/usePersistStorage';
 import { useState } from 'react';
 import Modal from './Modal';
 import { useNavigate } from 'react-router-dom';
+import PasswordCard from './PasswordCard';
+import PassDisplay from './PassDisplay';
 function Dashboard() {
     // Check if the user is logged in
     // If not, redirect to the login page
@@ -76,6 +78,8 @@ function Dashboard() {
               >
                   New
               </button>
+              {/* Call the PasswordCard to display to test for now */}
+              <PasswordCard />
           </div>
       </div>
       {modalOpen && <Modal closeModal={setModalOpen} />}
