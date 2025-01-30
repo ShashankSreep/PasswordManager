@@ -127,6 +127,8 @@ function Login() {
                         Login with Google
                     </button>
                 </div>
+                <h1 className="text-white text-center mt-3">Don't have an account? <a href="/signup" className="text-blue-500 underline ml-1">Sign Up</a></h1>
+                <h1 className="text-white text-center mt-3">Forgot Password? <a href="/login" className="text-blue-500 underline ml-1">Reset</a></h1>
             </div>
         </div>
     );

@@ -23,15 +23,15 @@ function App() {
     <UpdateContext.Provider value={{refresh, setRefresh}}>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={!signedIn? <Entry /> : <Navigate to="/dashboard" />}/>
-        <Route path="/login" element={!signedIn? <Login /> : <Navigate to ="/dashboard" />}/>
-        <Route path="/signup" element={!signedIn ? <SignUp /> : <Navigate to="/dashboard" />}/>
-        <Route path="/dashboard" element={ <Dashboard />}/>
+        <Route path="/" element={<Entry />}/>
+        <Route path="/login" element={<Login />}/>
+        <Route path="/signup" element={<SignUp />}/>
+        <Route path="/dashboard" element={<Dashboard />}/>
         <Route path="/masterpass" element= {<MasterPassword />} />
         <Route path="/createMaster" element = {<CreateMaster />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/displaypass/:name" element={<PassDisplay />} />
-        <Route path="/verify" element={<VerifyMP />} />
+        <Route path="/verify/:name" element={<VerifyMP />} />
       </Routes>
     </BrowserRouter>
     {modalOpen && <Modal setModalOpen={setModalOpen} />}

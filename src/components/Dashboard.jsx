@@ -8,20 +8,33 @@ import PasswordCard from './PasswordCard';
 import PassDisplay from './PassDisplay';
 import {useEffect} from 'react';
 import { retrieveAllEntries } from '../config/handlePassword';
+import { auth } from '../config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 // Any time we add a new password, we should call the PasswordCard component
 function Dashboard() {
     // Check if the user is logged in
     // If not, redirect to the login page
     // If logged in, display the dashboard
+
     const navigate = useNavigate();
     const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
     const [modalOpen, setModalOpen] = useState(false);
     const [entries, setEntries] = useState([]);
+    const [photoURL, setPhotoURL] = useState("");
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setPhotoURL(user.photoURL);
+            }
+        });
+    });
 
     if (!signedIn) {
-        return <Navigate to="/signup" />;
+        return <Navigate to="/login" />;
     }
+    
 
     const retrieveEntries = async () => {
       try {
@@ -41,6 +54,7 @@ function Dashboard() {
     const handleLogout = () => {
         console.log("Logout button clicked");
         setSignedIn(false);
+        return <Navigate to="/login" />;
     }
 
     const handleSaveClick = () => {
@@ -64,8 +78,9 @@ function Dashboard() {
           <div className="flex flex-col items-center w-30 bg-slate-900 p-4">
               <h2 className="text-white text-sm text-left font-bold">1Pass</h2>
               <button className="cursor-pointer mt-4" onClick={() => navigate("/profile")}>
+                {/* Either the user.IMAGE URL OR this */}
                   <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+                      src={photoURL ? photoURL : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"}
                       alt="Profile"
                       className="w-10 h-10 rounded-full"
                   />

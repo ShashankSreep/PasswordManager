@@ -16,12 +16,8 @@ export const comparePassword = async (password, email) => {
         const masterPassword = await retrieveMasterPassword(email);
         const match = await bcrypt.compare(password, masterPassword);
         if (match) {
-            console.log("Password match!");
-        } else {
-            console.log("Password does not match!");
-            console.log(match);
+            return match;
         }
-        return match;
     } catch (error) {
         console.error("Error comparing password: ", error);
     }

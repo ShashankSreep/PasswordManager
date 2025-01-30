@@ -5,13 +5,42 @@
 
 // On Submit, if the verification is successful, the user will be able to view their passwords i.e. taken to the page
 // On Cancel, the user will be taken back to the dashboard i.e. CLOSE the modal
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { getUserData } from "../config/firebase_api";
+import { comparePassword } from "../SecurePass/password";
+import { useParams } from "react-router-dom";
 function VerifyMP() {
+  const navigate = useNavigate();
+  const { name } = useParams();
+  const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
 
   const togglePass = () => {
     setShowPass((prevState) => !prevState);
   };
+
+
+  const handleSubmit = async () => {
+    // Check if the password is correct
+    // If correct, navigate to the page
+    // Else, show an error message
+    const userData = await getUserData();
+    if (userData) {
+      // First verify the password
+      const res = await comparePassword(password, userData.email);
+      if (res) {
+        return navigate(`/displaypass/${name}`);
+      } else {
+        alert("Incorrect Password");
+      }
+    }
+  }
+
+  const handleCancel = () => {
+    navigate("/dashboard");
+  }
 
   return (
     <div className="bg-slate-950 flex flex-col items-center h-screen p-4">
@@ -25,6 +54,7 @@ function VerifyMP() {
           <input
             type={showPass ? "text" : "password"}
             placeholder="Master Password"
+            onChange={(e) => setPassword(e.target.value)}
             className="w-64 px-4 py-2 border-b border-white-300 text-white focus:outline-none"
           />
           <button
@@ -64,13 +94,13 @@ function VerifyMP() {
         <div className="flex flex-row mt-2 justify-between">
         <button
             className="bg-red-700 text-white mt-2 rounded-b rounded-t px-4 py-1 hover:bg-red-600 cursor-pointer"
-        >
+        onClick={handleCancel}>
             Cancel
         </button>
         <button
           className="bg-slate-700 text-white mt-2 rounded-b rounded-t px-4 py-1 hover:bg-slate-600
             cursor-pointer"
-        >
+        onClick={handleSubmit}>
           Submit
         </button>
         </div>

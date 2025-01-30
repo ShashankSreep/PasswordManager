@@ -63,7 +63,7 @@ function PasswordCard() {
                 return (
                     <div key={index} className="bg-slate-900 p-3 rounded-md shadow-lg flex flex-col cursor-pointer hover:bg-slate-800
                     tranform hover:scale-101 transition-transform duration-200 ease-in-out active:scale-98 transition-transform duration-200 ease-in-out mt-1"
-                    onClick={() => navigate(`/displaypass/${entry}`)}>
+                    onClick={() => navigate(`/verify/${entry}`)}>
                         <h1 className="text-white">{entry}</h1>
                     </div>
                 );
