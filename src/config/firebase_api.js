@@ -1,11 +1,24 @@
 // Functions, which we will call in our components => Basically API to interact with Firebase
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getFirestore, addDoc, deleteDoc, updateDoc, getDoc, where } from "firebase/firestore";
 import { db } from "./firebase";
+import { auth } from "./firebase";
 
-export const addNewMasterPassword = async (masterPassword) =>  {
+
+export const getUserData = async () => {
     try {
-        const ref = await setDoc(doc(db, "MasterPassword", "MP"), {
+        const user = auth.currentUser;
+        if (user !== null) {
+            return user;
+        }
+    } catch (error) {
+        console.error("Error getting user details: ", error);
+    }
+}
+
+export const addNewMasterPassword = async (masterPassword, email) =>  {
+    try {
+        const ref = await setDoc(doc(db, "MasterPassword", email), {
             masterPassword: masterPassword
         });
     } catch (error) {
@@ -13,9 +26,9 @@ export const addNewMasterPassword = async (masterPassword) =>  {
     }
 }
 
-export const retrieveMasterPassword = async () => {
+export const retrieveMasterPassword = async (email) => {
     try {
-        const querySnapshot = await getDoc(doc(db, "MasterPassword", "MP"));
+        const querySnapshot = await getDoc(doc(db, "MasterPassword", email));
         console.log("Master Password: ", querySnapshot.data().masterPassword);
         return querySnapshot.data().masterPassword;
     } catch (error) {
@@ -25,16 +38,16 @@ export const retrieveMasterPassword = async () => {
 
 export const deleteMasterPassword = async () => {
     try {
-        await deleteDoc(doc(db, "MasterPassword", "MP"));
+        await deleteDoc(doc(db, "MasterPassword", email));
         console.log("Master Password deleted successfully!");
     } catch (error) {
         console.error("Error deleting master password: ", error);
     }
 }
 
-export const updateMasterPassword = async (newMasterPassword) => {
+export const updateMasterPassword = async (newMasterPassword, email) => {
     try {
-        const ref = await updateDoc(doc(db, "MasterPassword", "MP"), {
+        const ref = await updateDoc(doc(db, "MasterPassword", email), {
             masterPassword: newMasterPassword
         })
         console.log("Master Password updated successfully!");

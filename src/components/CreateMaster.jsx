@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { addNewMasterPassword } from "../config/firebase_api";
+import { addNewMasterPassword, getUserData } from "../config/firebase_api";
 import { hashPassword, comparePassword } from "../SecurePass/password";
 import { useNavigate } from "react-router-dom";
+
 function createMaster() {
     const navigate = useNavigate();
     const [masterPassword, setMasterPassword] = useState("");
@@ -16,9 +17,10 @@ function createMaster() {
     }
 
     const createMaster = async () => {
+        const user = await getUserData();
         const hashedPass = await hashPassword(masterPassword);
         console.log(masterPassword);
-        addNewMasterPassword(hashedPass);
+        addNewMasterPassword(hashedPass, user.email);
         setMasterPassword("");
         navigate("/masterpass");
         

@@ -11,9 +11,9 @@ export const encryptPass = (password) => {
 }
 
 
-export const decryptPass = async (name) => {
+export const decryptPass = async (name, mail) => {
     // Retrieve the key from the database
-    const encrypt = await retrieveEntry(name);
+    const encrypt = await retrieveEntry(name, mail);
     const key = encrypt.Key;
     const password = encrypt.Password;
     const decrypted = CryptoJS.AES.decrypt(password, key).toString(CryptoJS.enc.Utf8);

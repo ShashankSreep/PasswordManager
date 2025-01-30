@@ -6,28 +6,56 @@ import { useEffect } from "react";
 import { decryptPass } from "../SecurePass/encrypt";
 import { retrieveEntry } from "../config/handlePassword";
 import { useParams } from "react-router-dom";
+import { getUserData } from "../config/firebase_api";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
 function PassDisplay() {
     const { name } = useParams();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [website, setWebsite] = useState("");
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await retrieveEntry(name);
-                console.log("Data: ", data);
-                const decryptedPass = await decryptPass(name);
-                console.log("Decrypted Password: ", decryptedPass);
-                setEmail(data.Email);
-                setPassword(decryptedPass);
-                setWebsite(data.Website);
-            } catch (error) {
-                console.error("Error retrieving data: ", error);
-            }
-        };
-        getData();
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         try {
+    //             const user = await getUserData();
+    //             const data = await retrieveEntry(name, user.email);
+    //             console.log("Data: ", data);
+    //             const decryptedPass = await decryptPass(name);
+    //             console.log("Decrypted Password: ", decryptedPass);
+    //             setEmail(data.Email);
+    //             setPassword(decryptedPass);
+    //             setWebsite(data.Website);
+    //         } catch (error) {
+    //             console.error("Error retrieving data: ", error);
+    //         }
+    //     };
+    //     getData();
 
+    // }, []);
+    const retrieveEntries = async (userEmail) => {
+        if (userEmail) {
+            const entry = await retrieveEntry(name, userEmail);
+            console.log("Entry NEW: ", entry);
+            setEmail(entry.Email);
+            const decryptedPass = await decryptPass(name, userEmail);
+            setPassword(decryptedPass);
+            setWebsite(entry.Website);
+        } else {
+            console.error("No user email provided!");
+        }
+    }
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const email = user.email
+                retrieveEntries(email);
+            } else {
+                console.log("No user signed in!");
+            }
+            return () => unsubscribe();
+        });
     }, []);
 
         return (

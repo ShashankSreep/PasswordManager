@@ -41,7 +41,6 @@ function Dashboard() {
     const handleLogout = () => {
         console.log("Logout button clicked");
         setSignedIn(false);
-        return <Navigate to="/" />;
     }
 
     const handleSaveClick = () => {

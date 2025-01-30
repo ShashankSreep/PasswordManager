@@ -11,9 +11,9 @@ export const hashPassword = async (password) => {
     }
 }
 
-export const comparePassword = async (password) => {
+export const comparePassword = async (password, email) => {
     try {
-        const masterPassword = await retrieveMasterPassword();
+        const masterPassword = await retrieveMasterPassword(email);
         const match = await bcrypt.compare(password, masterPassword);
         if (match) {
             console.log("Password match!");

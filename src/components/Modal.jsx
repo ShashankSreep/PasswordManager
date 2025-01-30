@@ -19,12 +19,13 @@ function Modal({ closeModal }) {
 
     // On the click, we add a new entry to the database
     // We ALSO need to 
-    const handleClick = async () => {
+    const handleClick = () => {
         console.log("Clicked!");
         // Save everything and push to the database
         // Call encryptPass function to encrypt the password
         const [encryptedPass, key, encrypt] = encryptPass(password);
-        addNewEntry(name, email, encryptedPass, website, key);
+        const user = getAuth().currentUser;
+        addNewEntry(name, email, encryptedPass, website, key, user.email);
 
         console.log("Added new entry!");
         setRefresh(!refresh);

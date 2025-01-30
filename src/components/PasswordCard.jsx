@@ -10,6 +10,9 @@ import { retrieveAllEntries } from "../config/handlePassword";
 import { useEffect } from "react";
 // import the refresh key
 import { UpdateContext } from "../Hooks/UseContext";
+import { getUserData } from "../config/firebase_api";
+import { auth } from "../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 // All I need to do, is basically get ALL the entries from the database, and display them as cards
 // 1) Retrieve all the entries from the database
@@ -26,22 +29,30 @@ function PasswordCard() {
     // This will retrieve all the entries from the database
 
 
-    const retrieveEntries = async () => {
-        try {
-            // Returns an Array of all of the names of the websites/services
-            const allEntries = await retrieveAllEntries();
-            setEntries(allEntries); // For each entry, add the name to the entries array
-            console.log("Entries: ", entries);
-            // For each entry, add the name to the entries array
-        } catch (error) {
-            console.error("Error retrieving entries: ", error);
+    // Fix to use the user's email
+    const retrieveEntries = (userEmail) => {
+        if (userEmail) {
+            retrieveAllEntries(userEmail).then((res) => {
+                setEntries(res);
+            });
+        } else {
+            console.error("No user email provided!");
         }
     }
 
     // Should re-render each time the component is updated
     useEffect(() => {
-        retrieveEntries();
-    }, [refresh]);
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const email = user.email
+                retrieveEntries(email);
+            } else {
+                console.log("No user signed in!");
+                setEntries([]);
+            }
+            return () => unsubscribe();
+        });
+        }, [refresh]);
 
 
     // Now, I need to display the cards for each entry

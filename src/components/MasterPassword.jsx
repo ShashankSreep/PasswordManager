@@ -12,6 +12,8 @@ import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { hashPassword, comparePassword } from '../SecurePass/password';
 import { compare } from 'bcryptjs';
+import { use } from 'react';
+import { getUserData } from '../config/firebase_api';
 function MasterPassword () {
     const [showPass, setShowPass] = useState(false);
     const [masterPassword, setMasterPassword] = useState("");
@@ -22,8 +24,9 @@ function MasterPassword () {
     }
 
     const handleEnter = async () => {
+        const user = await getUserData();
         const curr_pass = masterPassword
-        const match = await comparePassword(curr_pass);
+        const match = await comparePassword(curr_pass, user.email);
         console.log("match?", match);
         if (match) {
             console.log("Master Password is correct");
