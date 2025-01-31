@@ -11,11 +11,14 @@ import { useState } from "react";
 import { getUserData } from "../config/firebase_api";
 import { comparePassword } from "../SecurePass/password";
 import { useParams } from "react-router-dom";
+import { isMasterContext } from "../Hooks/UseContext";
+import { useContext } from "react";
 function VerifyMP() {
   const navigate = useNavigate();
   const { name } = useParams();
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const { isMaster, setIsMaster } = useContext(isMasterContext);
 
   const togglePass = () => {
     setShowPass((prevState) => !prevState);
@@ -23,14 +26,12 @@ function VerifyMP() {
 
 
   const handleSubmit = async () => {
-    // Check if the password is correct
-    // If correct, navigate to the page
-    // Else, show an error message
     const userData = await getUserData();
     if (userData) {
       // First verify the password
       const res = await comparePassword(password, userData.email);
       if (res) {
+        setIsMaster(true);
         return navigate(`/displaypass/${name}`);
       } else {
         alert("Incorrect Password");
@@ -43,10 +44,10 @@ function VerifyMP() {
   }
 
   return (
-    <div className="bg-slate-950 flex flex-col items-center h-screen p-4">
+    <div className="bg-blue-100 dark:bg-slate-950 flex flex-col items-center h-screen p-4">
         
-      <div className="bg-slate-900 p-8 rounded-md shadow-lg flex flex-col">
-        <h1 className="text-white text-sm">
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-md shadow-lg flex flex-col">
+        <h1 className="text-black dark:text-white text-sm">
           Please enter your Master Password
         </h1>
 
@@ -55,11 +56,11 @@ function VerifyMP() {
             type={showPass ? "text" : "password"}
             placeholder="Master Password"
             onChange={(e) => setPassword(e.target.value)}
-            className="w-64 px-4 py-2 border-b border-white-300 text-white focus:outline-none"
+            className="w-64 px-4 py-2 border-b border-white-300 text-black dark:text-white focus:outline-none"
           />
           <button
             type="button"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white cursor-pointer"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black dark:text-white cursor-pointer"
             onClick={togglePass}
           >
             {showPass ? (

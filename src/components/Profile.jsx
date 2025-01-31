@@ -35,9 +35,9 @@ function Profile() {
   // }
 
   return (
-    <div className="bg-slate-950 flex flex-col items-center justify-center h-screen p-4">
-      <div className="bg-slate-900 p-18 rounded-md shadow-lg flex flex-col">
-        <h1 className="text-white text-3xl font-bold text-center">
+    <div className="bg-blue-100 dark:bg-slate-950 flex flex-col items-center justify-center h-screen p-4">
+      <div className="bg-white dark:bg-slate-900 p-18 rounded-md shadow-lg flex flex-col">
+        <h1 className="text-black dark:text-white text-3xl font-bold text-center">
           My Profile
         </h1>
         {/* Insert a button later, to change the permission to true/false for read-only */}
@@ -60,7 +60,7 @@ function Profile() {
             type="text"
             placeholder={name ? name : "No name provided"}
             readOnly={true}
-            className="w-64 px-4 py-1 border-b border-white-300 text-white focus:outline-none"
+            className="w-64 px-4 py-1 border-b border-white-300 text-black dark:text-white focus:outline-none"
           />
         </div>
         <div className="flex flex-col">
@@ -69,11 +69,11 @@ function Profile() {
             type="text"
             placeholder={email}
             readOnly={true}
-            className="w-64 px-4 py-1 border-b border-white-300 text-white focus:outline-none"
+            className="w-64 px-4 py-1 border-b border-white-300 text-black dark:text-white focus:outline-none"
           />
         </div>
         <div className="flex flex-col space-y-3 mt-8">
-          <button className="px-8 py-2 bg-slate-700 hover:bg-slate-600 rounded-md text-white cursor-pointer" onClick={() => navigate("/dashboard")}>
+          <button className="px-8 py-2 bg-blue-400 dark:bg-slate-700 hover:bg-blue-300 dark:hover:bg-slate-600 rounded-md text-white cursor-pointer" onClick={() => navigate("/dashboard")}>
             Reset Master Password
           </button>
         </div>

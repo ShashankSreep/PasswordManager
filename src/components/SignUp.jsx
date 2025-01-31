@@ -9,7 +9,7 @@ import { usePersistStorage } from '../Hooks/usePersistStorage';
 import {doc, setDoc, getFirestore} from 'firebase/firestore';
 import {db} from '../config/firebase';
 import { setItem } from '../utils/localStorage';
-
+import { retrieveMasterPassword } from '../config/firebase_api';
 function SignUp() {
 
     const [userName, setUserName] = useState("");
@@ -72,16 +72,22 @@ function SignUp() {
             console.log("User signed in successfully!");
             //setSignedIn(true);
             setItem("loggedin", true); // Set the signedIn state in localStorage
-            navigate("/masterpass");
+            // check if the user already has a master password
+            const masterPassword = await retrieveMasterPassword(popup.user.email);
+            if (masterPassword !== null) {
+                navigate("/dashboard");
+            } else {
+              navigate("/createMaster");
+            }
         } catch (error) {
             console.error("Error signing in: ", error);
         }
     }
 
     return (
-        <div className="bg-slate-950 flex flex-col items-center justify-center h-screen p-4">
-          <div className="bg-slate-900 p-18 rounded-md shadow-lg flex flex-col"> 
-            <h1 className="text-white font-bold text-3xl">Sign Up</h1>
+        <div className="dark:bg-slate-950 bg-blue-100 flex flex-col items-center justify-center h-screen p-4">
+          <div className="dark:bg-slate-900 bg-white p-18 rounded-md shadow-lg flex flex-col"> 
+            <h1 className="dark:text-white text-slate-950 font-bold text-3xl">Sign Up</h1>
             
             <input 
               type="text" 
@@ -89,7 +95,7 @@ function SignUp() {
               value={userName}
               onChange={handleUserNameChange}
               onKeyDown={(e) => {createUserEnter(e)}}
-              className="w-64 px-4 py-2 border-b border-white-300 text-white mt-5 focus:outline-none"
+              className="w-64 px-4 py-2 border-b border-white-300 dark:text-white text-black mt-5 focus:outline-none"
             />
             <div className="relative w-64 mt-5">
                 <input 
@@ -97,11 +103,11 @@ function SignUp() {
                 placeholder="Password"
                 value={password}
                 onChange={handlePasswordChange}
-                className="w-full px-4 py-2 border-b border-white-300 text-white focus:outline-none"
+                className="w-full px-4 py-2 border-b border-white-300 text-black dark:text-white focus:outline-none"
                 />
                 <button 
                     type="button" 
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white cursor-pointer"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-black dark:text-white cursor-pointer"
                     onClick={togglePass}
                 >
                 {showPass ? (
@@ -127,7 +133,7 @@ function SignUp() {
               </button>
             </div>
             
-            <h1 className="text-white text-center mt-3">Already a User? <a href="/login" className="text-blue-500 underline ml-1">Login</a></h1>
+            <h1 className="text-black dark:text-white text-center mt-3">Already a User? <a href="/login" className="text-blue-800 dark:text-blue-500 underline ml-1">Login</a></h1>
           </div>
         </div>
       );

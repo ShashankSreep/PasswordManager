@@ -5,7 +5,7 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Dashboard from './components/Dashboard';
 import { createContext, useState } from 'react';
-import { AuthContext, UpdateContext } from './Hooks/UseContext';
+import { AuthContext, UpdateContext, isMasterContext } from './Hooks/UseContext';
 import { usePersistStorage } from './Hooks/usePersistStorage';
 import Modal from './components/Modal';
 import MasterPassword from './components/MasterPassword';
@@ -14,13 +14,20 @@ import Profile from './components/Profile';
 import PassDisplay from './components/PassDisplay';
 import VerifyMP from './components/VerifyMP';
 import { useParams } from 'react-router-dom';
+import { isDarkContext } from './Hooks/UseContext';
 function App() {
   const [signedIn, setSignedIn] = usePersistStorage("loggedin", false);
   const [refresh, setRefresh] = usePersistStorage("refresh", false);
+  // Initially, this will be false
+  const [isMaster, setIsMaster] = usePersistStorage("isMaster", false);
+  const [isDark, setIsDark] = usePersistStorage("isDark", false);
+  // If the user has created a master password, this will be true
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <AuthContext.Provider value={{signedIn, setSignedIn}}>
     <UpdateContext.Provider value={{refresh, setRefresh}}>
+    <isMasterContext.Provider value={{isMaster, setIsMaster}}>
+    <isDarkContext.Provider value={{isDark, setIsDark}}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Entry />}/>
@@ -35,6 +42,8 @@ function App() {
       </Routes>
     </BrowserRouter>
     {modalOpen && <Modal setModalOpen={setModalOpen} />}
+    </isDarkContext.Provider>
+    </isMasterContext.Provider>
     </UpdateContext.Provider>
   </AuthContext.Provider>
   )

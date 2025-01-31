@@ -27,13 +27,13 @@ export const addNewMasterPassword = async (masterPassword, email) =>  {
 }
 
 export const retrieveMasterPassword = async (email) => {
-    try {
         const querySnapshot = await getDoc(doc(db, "MasterPassword", email));
-        console.log("Master Password: ", querySnapshot.data().masterPassword);
+        //console.log("Master Password: ", querySnapshot.data().masterPassword);
+        if (!querySnapshot.exists()) {
+            console.log("Master Password does not exist");
+            return null;
+        }
         return querySnapshot.data().masterPassword;
-    } catch (error) {
-        console.error("Error retrieving master password: ", error);
-    }
 }
 
 export const deleteMasterPassword = async () => {
